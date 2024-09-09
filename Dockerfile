@@ -15,5 +15,5 @@ RUN npm install -g http-server
 # Exponiere den gewünschten Port
 EXPOSE 4711
 
-# Starte den http-server, um die Dateien zur Verfügung zu stellen
-CMD ["http-server", "-p", "4711"]
+# Starte den http-server, um die Dateien zur Verfügung zu stellen, mit aktiviertem CORS
+CMD ["http-server", "-p", "4711", "--cors"]

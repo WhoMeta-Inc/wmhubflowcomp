@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
       - name: cdnjs-flow-flows-infinity
-        image: wmacs.azurecr.io/whometa-flow-components:latest # Ersetze durch dein tatsächliches Image
+        image: wmacs.azurecr.io/whometa/whometa-flow-components:latest # Ersetze durch dein tatsächliches Image
         ports:
         - containerPort: 4711
 ---
@@ -68,7 +68,7 @@ spec:
   ingressClassName: nginx
   tls:
   - hosts:
-    - cdnjs.whometa.eu
+    - cdnjs.whometa.eu  
     secretName: cdnjs-flow-flows-infinity-tls
   rules:
   - host: cdnjs.whometa.eu
