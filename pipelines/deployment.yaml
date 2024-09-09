@@ -7,7 +7,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: cdnjs-flow-flows-infinity
-  namespace: flows
+  namespace: prod
   labels:
     app: cdnjs-flow-flows-infinity
 spec:
@@ -30,7 +30,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: cdnjs-flow-flows-infinity-service
-  namespace: flows
+  namespace: prod
   labels:
     app: cdnjs-flow-flows-infinity
 spec:
@@ -46,7 +46,7 @@ apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: cdnjs-flow-flows-infinity-cert
-  namespace: flows
+  namespace: prod
 spec:
   secretName: cdnjs-flow-flows-infinity-tls
   issuerRef:
@@ -60,7 +60,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: cdnjs-flow-flows-infinity-ingress
-  namespace: flows
+  namespace: prod
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
     cert-manager.io/cluster-issuer: letsencrypt-azure
