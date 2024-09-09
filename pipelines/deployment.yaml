@@ -39,7 +39,7 @@ spec:
   ports:
   - protocol: TCP
     port: 80
-    targetPort: 8080
+    targetPort: 4711
   type: ClusterIP
 ---
 apiVersion: cert-manager.io/v1

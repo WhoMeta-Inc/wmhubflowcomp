@@ -13,7 +13,7 @@ COPY components ./components
 RUN npm install -g http-server
 
 # Exponiere den gewünschten Port
-EXPOSE 8080
+EXPOSE 4711
 
 # Starte den http-server, um die Dateien zur Verfügung zu stellen
 CMD ["http-server", "-p", "4711"]
