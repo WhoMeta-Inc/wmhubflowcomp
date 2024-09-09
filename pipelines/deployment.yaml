@@ -22,9 +22,9 @@ spec:
     spec:
       containers:
       - name: cdnjs-flow-flows-infinity
-        image: flowcomponents-cdn:latest # Ersetze durch dein tatsächliches Image
+        image: wmacs.azurecr.io/whometa-flow-components:latest # Ersetze durch dein tatsächliches Image
         ports:
-        - containerPort: 8080
+        - containerPort: 4711
 ---
 apiVersion: v1
 kind: Service
