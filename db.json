@@ -9,7 +9,7 @@
 		"color": "",
 		"version": "3",
 		"kind": "action",
-		"readme": "This component implements the [Total.js API Router](https://docs.totaljs.com/total4/cc674001rr51c/#total-js-routing) that allows you to provide only one endpoint (route) by adding multiple endpoints divided by keys. The component expects REST Route message or data in the form:\n\n```js\n{\n\t\"schema\": \"schema_name/{param_1}/{param_2}?query=arguments\",\n\t\"data\": {} // optional, request payload\n}\n```\n\n< __Good to know:__<br>Output data will be the same `data`, but extendend by adding new properties declared below.\n\n__Extended output data:__\n\n- `id {String}` first value from dynamic value\n- `params {Object}` dynamic values\n- `query {Object}` query arguments\n- `user {Object}` optional, inherited from the controller\n- `session {Object}` optional, inherited from the controller\n- `ip {String}` optional, inherited from the controller\n\nIf the controller is stored in the `message.refs.controller` property, then its properties like `controller.id`, `controller.params` and `controller.query` will be extendend by values from parsed schema."
+		"readme": "This component implements the [WhoMeta API Router](https://docs.totaljs.com/total4/cc674001rr51c/#total-js-routing) that allows you to provide only one endpoint (route) by adding multiple endpoints divided by keys. The component expects REST Route message or data in the form:\n\n```js\n{\n\t\"schema\": \"schema_name/{param_1}/{param_2}?query=arguments\",\n\t\"data\": {} // optional, request payload\n}\n```\n\n< __Good to know:__<br>Output data will be the same `data`, but extendend by adding new properties declared below.\n\n__Extended output data:__\n\n- `id {String}` first value from dynamic value\n- `params {Object}` dynamic values\n- `query {Object}` query arguments\n- `user {Object}` optional, inherited from the controller\n- `session {Object}` optional, inherited from the controller\n- `ip {String}` optional, inherited from the controller\n\nIf the controller is stored in the `message.refs.controller` property, then its properties like `controller.id`, `controller.params` and `controller.query` will be extendend by values from parsed schema."
 	},
 	{
 		"id": "chatgpt",
@@ -112,7 +112,7 @@
 		"group": "Triggers",
 		"name": "Crontab",
 		"url": "https://cdnjs.whometa.eu/components/crontab.html",
-		"author": "Peter Širka / Total.js",
+		"author": "WhoMeta Inc",
 		"icon": "ti ti-clock",
 		"color": "",
 		"version": "1",
@@ -124,7 +124,7 @@
 		"group": "Dashboard",
 		"name": "CSV Dataset",
 		"url": "https://cdnjs.whometa.eu/components/csvdataset.html",
-		"author": "Peter Širka",
+		"author": "WhoMeta Inc",
 		"icon": "ti ti-database",
 		"color": "",
 		"version": "2",
@@ -165,7 +165,7 @@
 		"color": "",
 		"version": "2",
 		"kind": "",
-		"readme": "This component can perform some operations on a database with the help of Total.js QueryBuilder. First, you must initialize the connection string for the database via QueryBuilder initialization.\n\n__Input data__:\n\n- `data {Object}` or `body {Object}` optional - payload\n- `query {Object}` optional - query data, key/value must be string\n- `params {Object}` optional - dynamic values, key/value must be string\n- `user {Object}` optional - a user instance\n\n__Output__:\n\n- `insert` returns Number\n- `update` returns Number\n- `remove` returns Number\n- `query` returns Array of Objects\n- `read` returns Object\n- `list` returns:\n\n```json\n{\n\titems: Array,\n\tpage: Number,\n\tpages: Number,\n\tcount: Number\n}\n```\n\nQuery parameters for the `List` operation can contain the below fields which can affect filtering according to the values defined in the dynamic filter.\n\n- `sort {String}` can contain field name with `_asc` or `_desc` value\n- `fields {String}` can return only specified fields separated by comma\n- `page {Number}` page number\n- `limit {Number}` max. items per page (default: max. limit)\n- `column_name=VALUE` enables dynamic filtering\n\n---\n\n__Good to know__: If the `data` (payload) can contain special key names in the form:\n\n- `+key` increments a value\n- `-key` decrements a value\n- `!key` performs toggle for boolean values\n- `>key` stores only greater value\n- `<key` stores only lower value"
+		"readme": "This component can perform some operations on a database with the help of WhoMeta QueryBuilder. First, you must initialize the connection string for the database via QueryBuilder initialization.\n\n__Input data__:\n\n- `data {Object}` or `body {Object}` optional - payload\n- `query {Object}` optional - query data, key/value must be string\n- `params {Object}` optional - dynamic values, key/value must be string\n- `user {Object}` optional - a user instance\n\n__Output__:\n\n- `insert` returns Number\n- `update` returns Number\n- `remove` returns Number\n- `query` returns Array of Objects\n- `read` returns Object\n- `list` returns:\n\n```json\n{\n\titems: Array,\n\tpage: Number,\n\tpages: Number,\n\tcount: Number\n}\n```\n\nQuery parameters for the `List` operation can contain the below fields which can affect filtering according to the values defined in the dynamic filter.\n\n- `sort {String}` can contain field name with `_asc` or `_desc` value\n- `fields {String}` can return only specified fields separated by comma\n- `page {Number}` page number\n- `limit {Number}` max. items per page (default: max. limit)\n- `column_name=VALUE` enables dynamic filtering\n\n---\n\n__Good to know__: If the `data` (payload) can contain special key names in the form:\n\n- `+key` increments a value\n- `-key` decrements a value\n- `!key` performs toggle for boolean values\n- `>key` stores only greater value\n- `<key` stores only lower value"
 	},
 	{
 		"id": "date",
@@ -249,7 +249,7 @@
 		"color": "",
 		"version": "1",
 		"kind": "",
-		"readme": "This component transforms incoming data to the Total.js Error structure."
+		"readme": "This component transforms incoming data to the WhoMeta Error structure."
 	},
 	{
 		"id": "exec",
@@ -316,7 +316,7 @@
 		"group": "Common",
 		"name": "Flashback",
 		"url": "https://cdnjs.whometa.eu/components/flashback.html",
-		"author": "Peter Širka & Jakub Urban",
+		"author": "WhoMeta Inc",
 		"icon": "ti ti-history",
 		"color": "",
 		"version": "4",
@@ -364,7 +364,7 @@
 		"group": "Databases",
 		"name": "Influxdb",
 		"url": "https://cdnjs.whometa.eu/components/influxdb.html",
-		"author": "Martin Smola",
+		"author": "WhoMeta Inc",
 		"icon": "ti ti-database",
 		"color": "",
 		"version": "1",
@@ -433,7 +433,7 @@
 	},
 	{
 		"id": "logger",
-		"group": "Total.js API",
+		"group": "WhoMeta API",
 		"name": "Logger",
 		"url": "https://cdnjs.whometa.eu/components/logger.html",
 		"author": "WhoMeta Inc",
@@ -441,7 +441,7 @@
 		"color": "",
 		"version": "2",
 		"kind": "",
-		"readme": "The component logs incoming messages into the Total.js Cloud Logger."
+		"readme": "The component logs incoming messages into the WhoMeta Cloud Logger."
 	},
 	{
 		"id": "macro",
@@ -453,7 +453,7 @@
 		"color": "",
 		"version": "1",
 		"kind": "",
-		"readme": "The macro component uses Total.js Macro language that allows you to write much simple code like in JavaScript. Macros are targeted for small data transformation.\n\n- you don't need to solve Upper/Lower case\n- `return EXPRESSION` will return data and send them next\n- `data` keyword contains a message data\n- `temp` keyword can contain a persistent temporary data\n\n__Example__:\n\n```text\nIF DATA>20 AND DATA<35\n\tRETURN DATA * 5\nFI\n```"
+		"readme": "The macro component uses WhoMeta Macro language that allows you to write much simple code like in JavaScript. Macros are targeted for small data transformation.\n\n- you don't need to solve Upper/Lower case\n- `return EXPRESSION` will return data and send them next\n- `data` keyword contains a message data\n- `temp` keyword can contain a persistent temporary data\n\n__Example__:\n\n```text\nIF DATA>20 AND DATA<35\n\tRETURN DATA * 5\nFI\n```"
 	},
 	{
 		"id": "map-array",
@@ -544,7 +544,7 @@
 		"group": "Databases",
 		"name": "MongoDB Insert",
 		"url": "https://cdnjs.whometa.eu/components/mongodb-insert.html",
-		"author": "Martin Smola",
+		"author": "WhoMeta Inc",
 		"icon": "ti ti-database",
 		"color": "",
 		"version": "1",
@@ -556,7 +556,7 @@
 		"group": "Databases",
 		"name": "MongoDB Query",
 		"url": "https://cdnjs.whometa.eu/components/mongodb-query.html",
-		"author": "Martin Smola",
+		"author": "WhoMeta Inc",
 		"icon": "ti ti-database",
 		"color": "",
 		"version": "2",
@@ -568,7 +568,7 @@
 		"group": "MQTT",
 		"name": "MQTT Broker",
 		"url": "https://cdnjs.whometa.eu/components/mqtt-broker.html",
-		"author": "Martin Smola",
+		"author": "WhoMeta Inc",
 		"icon": "ti ti-exchange",
 		"color": "",
 		"version": "3",
@@ -580,7 +580,7 @@
 		"group": "MQTT",
 		"name": "MQTT Publish",
 		"url": "https://cdnjs.whometa.eu/components/mqtt-publish.html",
-		"author": "Martin Smola",
+		"author": "WhoMeta Inc",
 		"icon": "ti ti-sign-out",
 		"color": "",
 		"version": "3",
@@ -592,7 +592,7 @@
 		"group": "MQTT",
 		"name": "MQTT Subscribe",
 		"url": "https://cdnjs.whometa.eu/components/mqtt-subscribe.html",
-		"author": "Martin Smola",
+		"author": "WhoMeta Inc",
 		"icon": "ti ti-sign-in",
 		"color": "",
 		"version": "3",
@@ -724,7 +724,7 @@
 		"group": "Common",
 		"name": "Print JSON",
 		"url": "https://cdnjs.whometa.eu/components/printjson.html",
-		"author": "Martin Smola",
+		"author": "WhoMeta Inc",
 		"icon": "ti ti-print",
 		"color": "",
 		"version": "2",
@@ -760,7 +760,7 @@
 		"group": "Generators",
 		"name": "QR Code",
 		"url": "https://cdnjs.whometa.eu/components/qrcode.html",
-		"author": "Peter Širka / Total.js",
+		"author": "WhoMeta Inc",
 		"icon": "ti ti-qrcode-alt",
 		"color": "",
 		"version": "1",
@@ -909,11 +909,11 @@
 		"color": "",
 		"version": "1",
 		"kind": "",
-		"readme": "The component installs Total.js server-side extension. In other words: it can evaluate JavaScript code when the component is initialized or the component settings is changed."
+		"readme": "The component installs WhoMeta server-side extension. In other words: it can evaluate JavaScript code when the component is initialized or the component settings is changed."
 	},
 	{
 		"id": "sms",
-		"group": "Total.js API",
+		"group": "WhoMeta API",
 		"name": "SMS",
 		"url": "https://cdnjs.whometa.eu/components/sms.html",
 		"author": "WhoMeta Inc",
@@ -933,7 +933,7 @@
 		"color": "",
 		"version": "1",
 		"kind": "",
-		"readme": "The component splits a message with an array of objects on the input into separate messages with individual objects on the output.\n\n__Input example__:\n\n```js\n[\n\t{\n\t\t\"email\": \"michal@totaljs.com\",\n\t\t\"date\": 20220202,\n\t\t\"meno\": \"Michal Klacan\"\n\t},\n\t{\n\t\t\"email\": \"martin@totaljs.com\",\n\t\t\"date\": 20220204,\n\t\t\"meno\": \"Martin Smola\"\n\t},\n\t{\n\t\t\"email\": \"peter@totaljs.com\",\n\t\t\"datum\": 20220210,\n\t\t\"meno\": \"Peter Sirka\"\n\t}\n]\n```\n\n__Output example__:\n\n```js\n{\n\t\"email\": \"michal@totaljs.com\",\n\t\"date\": 20220202,\n\t\"meno\": \"Michal Klacan\"\n}\n```\n\n```js\n{\n\t\"email\": \"martin@totaljs.com\",\n\t\"date\": 20220204,\n\t\"meno\": \"Martin Smola\"\n}\n```\n\n```js\n{\n\t\"email\": \"peter@totaljs.com\",\n\t\"datum\": 20220210,\n\t\"meno\": \"Peter Sirka\"\n}\n```"
+		"readme": "The component splits a message with an array of objects on the input into separate messages with individual objects on the output.\n\n__Input example__:\n\n```js\n[\n\t{\n\t\t\"email\": \"michal@totaljs.com\",\n\t\t\"date\": 20220202,\n\t\t\"meno\": \"Michal Klacan\"\n\t},\n\t{\n\t\t\"email\": \"martin@totaljs.com\",\n\t\t\"date\": 20220204,\n\t\t\"meno\": \"WhoMeta Inc\"\n\t},\n\t{\n\t\t\"email\": \"peter@totaljs.com\",\n\t\t\"datum\": 20220210,\n\t\t\"meno\": \"Peter Sirka\"\n\t}\n]\n```\n\n__Output example__:\n\n```js\n{\n\t\"email\": \"michal@totaljs.com\",\n\t\"date\": 20220202,\n\t\"meno\": \"Michal Klacan\"\n}\n```\n\n```js\n{\n\t\"email\": \"martin@totaljs.com\",\n\t\"date\": 20220204,\n\t\"meno\": \"WhoMeta Inc\"\n}\n```\n\n```js\n{\n\t\"email\": \"peter@totaljs.com\",\n\t\"datum\": 20220210,\n\t\"meno\": \"Peter Sirka\"\n}\n```"
 	},
 	{
 		"id": "restsql",
@@ -1017,14 +1017,14 @@
 		"color": "",
 		"version": "1",
 		"kind": "",
-		"readme": "The component uses server-side implementation of [Tangular template engine](https://docs.totaljs.com/components/40d06002lm50c/).\n\n## Example\n\n__Incomming data__:\n\n```js\n{\n\tapp_name: 'Total.js Flow'\n}\n```\n\n__Template__:\n\n```html\nApp name: {{ value.app_name }}\n```\n\n- `$` type `{MessageInstance}` <https://docs.totaljs.com/total4/40844001ni51c/>\n\nIn the example bellow, the $.refs.controller is only available if the message was created by the Route component:\n\n```html\nURL: {{ $.refs.controller.url }}\n```"
+		"readme": "The component uses server-side implementation of [Tangular template engine](https://docs.totaljs.com/components/40d06002lm50c/).\n\n## Example\n\n__Incomming data__:\n\n```js\n{\n\tapp_name: 'WhoMeta Flow'\n}\n```\n\n__Template__:\n\n```html\nApp name: {{ value.app_name }}\n```\n\n- `$` type `{MessageInstance}` <https://docs.totaljs.com/total4/40844001ni51c/>\n\nIn the example bellow, the $.refs.controller is only available if the message was created by the Route component:\n\n```html\nURL: {{ $.refs.controller.url }}\n```"
 	},
 	{
 		"id": "telemetry",
 		"group": "Common",
 		"name": "Telemetry",
 		"url": "https://cdnjs.whometa.eu/components/telemetry.html",
-		"author": "Martin Smola",
+		"author": "WhoMeta Inc",
 		"icon": "ti ti-rss-square",
 		"color": "",
 		"version": "4",
@@ -1132,7 +1132,7 @@
 		"group": "Generators",
 		"name": "Variable symbol",
 		"url": "https://cdnjs.whometa.eu/components/vs.html",
-		"author": "Peter Širka / Total.js",
+		"author": "WhoMeta Inc",
 		"icon": "ti ti-plus",
 		"color": "",
 		"version": "1",
@@ -1149,7 +1149,7 @@
 		"color": "",
 		"version": "3",
 		"kind": "",
-		"readme": "The component simulates Total.js Schema Workflow operation. It can process data and store/read them into the database.\n\n__Properties__:\n\n- `$ {Message}`\n- `controller {Object}` A controller instance\n- `user {Object}` A user instance if exists\n- `headers {Object}` Request headers\n- `query {Object}` URL query arguments\n- `params {Object}` A dynamic URL params\n- `ip {String}` IP address\n- __`repo {Object}`__ a custom persistent repository object\n- __`model {Object}`__ an alias to `$.data`\n\n__Model/Data__:\n\n- `$.data {Object}` a message data\n- `$.repo {Object}` a message repository\n- `$.refs {Object}` a message references\n\n__Functions__:\n\n- `variable(key {String}) returns {String}` for reading variables\n- `cancel()` Cancels the processing without error and sending data next\n- `respond(data {Object})` Responds with data\n- `success(data {Object} optional)` Response with success object\n- `invalid(error {String})` Error handling`\n- `done(respond_value {Boolean/Object} optional)` return `function(err, response)` for handling callbacks\n\t- when it `fails` it calls `invalid()`\n\t- when it `done` it calls `success()`"
+		"readme": "The component simulates WhoMeta Schema Workflow operation. It can process data and store/read them into the database.\n\n__Properties__:\n\n- `$ {Message}`\n- `controller {Object}` A controller instance\n- `user {Object}` A user instance if exists\n- `headers {Object}` Request headers\n- `query {Object}` URL query arguments\n- `params {Object}` A dynamic URL params\n- `ip {String}` IP address\n- __`repo {Object}`__ a custom persistent repository object\n- __`model {Object}`__ an alias to `$.data`\n\n__Model/Data__:\n\n- `$.data {Object}` a message data\n- `$.repo {Object}` a message repository\n- `$.refs {Object}` a message references\n\n__Functions__:\n\n- `variable(key {String}) returns {String}` for reading variables\n- `cancel()` Cancels the processing without error and sending data next\n- `respond(data {Object})` Responds with data\n- `success(data {Object} optional)` Response with success object\n- `invalid(error {String})` Error handling`\n- `done(respond_value {Boolean/Object} optional)` return `function(err, response)` for handling callbacks\n\t- when it `fails` it calls `invalid()`\n\t- when it `done` it calls `success()`"
 	},
 	{
 		"id": "xmlparser",

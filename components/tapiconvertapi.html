@@ -3,9 +3,9 @@
 	exports.id = 'tapiconvertapi';
 	exports.name = 'File converter';
 	exports.icon = 'ti ti-file-import';
-	exports.author = 'Total.js';
+	exports.author = 'WhoMeta Inc';
 	exports.version = '1';
-	exports.group = 'Total.js API Services';
+	exports.group = 'WhoMeta API Services';
 	exports.config = { token: '', path: '', to: 'pdf', output: 'buffer' };
 	exports.inputs = [{ id: 'input', name: 'Input' }];
 	exports.outputs = [{ id: 'output', name: 'Output' }, { id: 'error', name: 'Error' }];
@@ -79,7 +79,7 @@
 </script>
 
 <readme>
-It converts file to another type of file. It utilizes the [Total.js Convert API](https://docs.totaljs.com/totalapi/6c221003eo51c/#13ff8001db51d).
+It converts file to another type of file. It utilizes the [WhoMeta Convert API](https://docs.totaljs.com/totalapi/6c221003eo51c/#13ff8001db51d).
 
 __Input data:__
 
@@ -95,7 +95,7 @@ Returns data according to the component configuration `Response type`. It can be
 <settings>
 	<div class="padding bg-smoke">
 		<div class="m">
-			<p><a href="https://docs.totaljs.com/totalapi/6c221002eo50c/" target="_blank"><i class="ti ti-caret-right mr5"></i>Get Total.js API token</a>.<br>The token field supports variables in the form <span class="badge badge-medium badge-silver">{variable}</span>.</p>
+			<p><a href="https://docs.totaljs.com/totalapi/6c221002eo50c/" target="_blank"><i class="ti ti-caret-right mr5"></i>Get WhoMeta API token</a>.<br>The token field supports variables in the form <span class="badge badge-medium badge-silver">{variable}</span>.</p>
 			<ui-component name="input" path="?.token" config="camouflage:1;required:1;monospace:1"><b>API token</b></ui-component>
 		</div>
 		<div class="m">

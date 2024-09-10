@@ -1,12 +1,12 @@
-# Total.js Flow components
+# WhoMeta Flow components
 
 [![Made in EU](https://cdn.componentator.com/eu-small.png)](https://european-union.europa.eu/)
 
 - [Documentation](https://docs.totaljs.com)
-- [Join Total.js Telegram](https://t.me/totaljs)
+- [Join WhoMeta Telegram](https://t.me/totaljs)
 - [Support](https://www.totaljs.com/support/)
 
-This repository contains open-source __Total.js Flow components__. Please keep:
+This repository contains open-source __WhoMeta Flow components__. Please keep:
 
 - [Our coding standards and guidelines](https://docs.totaljs.com/welcome/67b47001ty51c/)
 

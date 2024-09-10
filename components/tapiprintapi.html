@@ -3,9 +3,9 @@
 	exports.id = 'tapiprintapi';
 	exports.name = 'Print PDF';
 	exports.icon = 'ti ti-print';
-	exports.author = 'Total.js';
+	exports.author = 'WhoMeta Inc';
 	exports.version = '1';
-	exports.group = 'Total.js API Services';
+	exports.group = 'WhoMeta API Services';
 	exports.config = { token: '', path: '', type: 'pdf', page: 'A4', width: 0, height: 0, dpi: 96, top: 0, right: 0, bottom: 0, left: 0, viewport: '', quality: 80, orientation: 'portrait', grayscale: false, lowquality: false, zoom: 100, output: 'buffer' };
 	exports.inputs = [{ id: 'input', name: 'Input' }];
 	exports.outputs = [{ id: 'output', name: 'Output' }, { id: 'error', name: 'Error' }];
@@ -103,7 +103,7 @@
 </script>
 
 <readme>
-Prints HTML or URL address to PDF, JPG, PNG or DOCX file. It utilizes the [Total.js Print API](https://docs.totaljs.com/totalapi/6c221003eo51c/#6c225001ga51c).
+Prints HTML or URL address to PDF, JPG, PNG or DOCX file. It utilizes the [WhoMeta Print API](https://docs.totaljs.com/totalapi/6c221003eo51c/#6c225001ga51c).
 
 __Input data:__
 ```js
@@ -119,7 +119,7 @@ Returns data according to the component configuration `Response type`. It can be
 	<div class="CLASS-settings">
 		<div class="padding bg-smoke">
 			<div class="m">
-				<p><a href="https://docs.totaljs.com/totalapi/6c221002eo50c/" target="_blank"><i class="ti ti-caret-right mr5"></i>Get Total.js API token</a>.<br>The token field supports variables in the form <span class="badge badge-medium badge-silver">{variable}</span>.</p>
+				<p><a href="https://docs.totaljs.com/totalapi/6c221002eo50c/" target="_blank"><i class="ti ti-caret-right mr5"></i>Get WhoMeta API token</a>.<br>The token field supports variables in the form <span class="badge badge-medium badge-silver">{variable}</span>.</p>
 				<ui-component name="input" path="?.token" config="camouflage:1;required:1;monospace:1"><b>API token</b></ui-component>
 			</div>
 			<div class="m">

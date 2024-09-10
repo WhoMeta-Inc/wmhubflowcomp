@@ -5,7 +5,7 @@
 	exports.group = 'Common';
 	exports.version = '7';
 	exports.icon = 'ti ti-cloud-download';
-	exports.author = 'Total.js';
+	exports.author = 'WhoMeta Inc';
 	exports.config = { url: '', method: 'GET', dnscache: true, insecure: false, secret: '', nocookies: true, xhr: false, parse: true, timeout: 10000, limit: 1024 * 500, responsebody: true, headers: {}, cookies: {}, serialize: null, send: 'all' };
 	exports.inputs = [{ id: 'payload', name: 'Payload' }];
 	exports.outputs = [{ id: 'response', name: 'Response' }, { id: 'error', name: 'Error' }];
@@ -243,6 +243,6 @@ __Response__:
 		<ui-component name="input" path="?.insecure" config="type:checkbox">Allow insecure connection</ui-component>
 		<ui-component name="input" path="?.xhr" config="type:checkbox">Add XHR header</ui-component>
 		<hr />
-		<ui-component name="input" path="?.secret" config="camouflage:1;icon:ti ti-totaljs">Total.js Encryption/Decryption secret</ui-component>
+		<ui-component name="input" path="?.secret" config="camouflage:1;icon:ti ti-totaljs">WhoMeta Encryption/Decryption secret</ui-component>
 	</div>
 </settings>
