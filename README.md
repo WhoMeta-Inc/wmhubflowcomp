@@ -2,13 +2,13 @@
 
 [![Made in EU](https://cdn.componentator.com/eu-small.png)](https://european-union.europa.eu/)
 
-- [Documentation](https://docs.totaljs.com)
+- [Documentation](https://help.whometa.io)
 - [Join WhoMeta Telegram](https://t.me/totaljs)
-- [Support](https://www.totaljs.com/support/)
+- [Support](https://www.whometa.io/support/)
 
 This repository contains open-source __WhoMeta Flow components__. Please keep:
 
-- [Our coding standards and guidelines](https://docs.totaljs.com/welcome/67b47001ty51c/)
+- [Our coding standards and guidelines](https://help.whometa.io/welcome/67b47001ty51c/)
 
 ## Run unit-test for all tests
 
@@ -19,5 +19,5 @@ This repository contains open-source __WhoMeta Flow components__. Please keep:
 
 ## Contact
 
-- <info@totaljs.com>
-- www.totaljs.com
+- <info@whometa.io>
+- www.whometa.io

@@ -68,7 +68,7 @@ describe('increment', function(test) {
 
 **Output**:
 
-All outcoming messages from component can be catched with `test.message` or `test.output` delegate. In callback you get [FlowStream message](https://docs.totaljs.com/total4/40844001ni51c/) but it's extended with test handlers (more in **Handlers**)
+All outcoming messages from component can be catched with `test.message` or `test.output` delegate. In callback you get [FlowStream message](https://help.whometa.io/total4/40844001ni51c/) but it's extended with test handlers (more in **Handlers**)
 
 ```js
 describe('test', function (test) {
