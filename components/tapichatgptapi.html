@@ -3,9 +3,9 @@
 	exports.id = 'tapichatgptapi';
 	exports.name = 'ChatGPT';
 	exports.icon = 'ti ti-robot';
-	exports.author = 'WhoMeta Inc';
+	exports.author = 'Total.js';
 	exports.version = '1';
-	exports.group = 'WhoMeta API Services';
+	exports.group = 'Total.js API Services';
 	exports.config = { token: '', path: '', output: 'text', size: 'small', response: 'buffer' };
 	exports.inputs = [{ id: 'input', name: 'Input' }];
 	exports.outputs = [{ id: 'output', name: 'Output' }, { id: 'error', name: 'Error' }];
@@ -70,13 +70,13 @@
 </script>
 
 <readme>
-By using this component you can asks ChatGPT / OpenAPI. It utilizes the [WhoMeta ChatGPT API](https://help.whometa.io/totalapi/6c221003eo51c/#128fm001kc51d).
+By using this component you can asks ChatGPT / OpenAPI. It utilizes the [Total.js ChatGPT API](https://docs.totaljs.com/totalapi/6c221003eo51c/#128fm001kc51d).
 
 __Input data:__
 
 ```js
 // {String} a question for ChatGPT
-'What is WhoMeta Platform'
+'What is Total.js Platform'
 ```
 
 __Output data__:
@@ -84,7 +84,7 @@ __Output data__:
 If `output` is set as Text:
 ```js
 {
-    text: 'WhoMeta Platform is a web development platform that provides a comprehensive set of tools and modules for building modern, scalable, and high-performance web applications. It is based on the Node.js runtime and offers a seamless development experience with a powerful, intuitive, and easy-to-use framework. WhoMeta Platform includes features such as database integration, real-time communication, server-side rendering, RESTful API support, and more. It also supports various front-end technologies and integrates seamlessly with popular third-party libraries and services, making it a great choice for building full-stack web applications.'
+    text: 'Total.js Platform is a web development platform that provides a comprehensive set of tools and modules for building modern, scalable, and high-performance web applications. It is based on the Node.js runtime and offers a seamless development experience with a powerful, intuitive, and easy-to-use framework. Total.js Platform includes features such as database integration, real-time communication, server-side rendering, RESTful API support, and more. It also supports various front-end technologies and integrates seamlessly with popular third-party libraries and services, making it a great choice for building full-stack web applications.'
 }
 ```
 
@@ -95,7 +95,7 @@ Returns data according to the component configuration Response type. It can be `
 <settings>
 	<div class="padding bg-smoke">
 		<div class="m">
-			<p><a href="https://help.whometa.io/totalapi/6c221002eo50c/" target="_blank"><i class="ti ti-caret-right mr5"></i>Get WhoMeta API token</a>.<br>The token field supports variables in the form <span class="badge badge-medium badge-silver">{variable}</span>.</p>
+			<p><a href="https://docs.totaljs.com/totalapi/6c221002eo50c/" target="_blank"><i class="ti ti-caret-right mr5"></i>Get Total.js API token</a>.<br>The token field supports variables in the form <span class="badge badge-medium badge-silver">{variable}</span>.</p>
 			<ui-component name="input" path="?.token" config="camouflage:1;required:1;monospace:1"><b>API token</b></ui-component>
 		</div>
 		<div class="m">

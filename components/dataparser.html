@@ -4,7 +4,7 @@
 	exports.name = 'Data parser';
 	exports.icon = 'ti ti-compress';
 	exports.group = 'Transformations';
-	exports.author = 'WhoMeta Inc';
+	exports.author = 'Total.js';
 	exports.version = '1';
 	exports.config = { type: '1', convert: false };
 	exports.inputs = [{ id: 'input', name: 'Input' }];
@@ -65,7 +65,7 @@ The component can parse newline data or begin/end phrases in the buffer or strin
 
 <settings>
 	<div class="padding">
-		<ui-component name="choose" path="?.type__selector:div" class="iconmenu m">
+		<ui-component name="choose" path="?.type" config="selector:div" class="iconmenu m">
 			<div data-id="1">
 				<i class="ti ti-arrow-down ti-sync"></i>
 				<span>CSV</span>

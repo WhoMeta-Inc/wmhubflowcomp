@@ -3,9 +3,9 @@
 	exports.id = 'tapicheckvatapi';
 	exports.name = 'Check VAT';
 	exports.icon = 'ti ti-money-check-alt';
-	exports.author = 'WhoMeta Inc';
+	exports.author = 'Total.js';
 	exports.version = '1';
-	exports.group = 'WhoMeta API Services';
+	exports.group = 'Total.js API Services';
 	exports.config = { token: '', path: '' };
 	exports.inputs = [{ id: 'input', name: 'Input' }];
 	exports.outputs = [{ id: 'output', name: 'Output' }, { id: 'error', name: 'Error' }];
@@ -53,7 +53,7 @@
 </script>
 
 <readme>
-Determines whether is a company VAT payer or no. Works only in European Union. It utilizes the [WhoMeta Check VAT API](https://help.whometa.io/totalapi/6c221003eo51c/#6d385001lt51c).
+Determines whether is a company VAT payer or no. Works only in European Union. It utilizes the [Total.js Check VAT API](https://docs.totaljs.com/totalapi/6c221003eo51c/#6d385001lt51c).
 
 __Input data:__
 
@@ -77,7 +77,7 @@ __Output data__:
 <settings>
 	<div class="padding bg-smoke">
 		<div class="m">
-			<p><a href="https://help.whometa.io/totalapi/6c221002eo50c/" target="_blank"><i class="ti ti-caret-right mr5"></i>Get WhoMeta API token</a>.<br>The token field supports variables in the form <span class="badge badge-medium badge-silver">{variable}</span>.</p>
+			<p><a href="https://docs.totaljs.com/totalapi/6c221002eo50c/" target="_blank"><i class="ti ti-caret-right mr5"></i>Get Total.js API token</a>.<br>The token field supports variables in the form <span class="badge badge-medium badge-silver">{variable}</span>.</p>
 			<ui-component name="input" path="?.token" config="camouflage:1;required:1;monospace:1"><b>API token</b></ui-component>
 		</div>
 		<div class="m">

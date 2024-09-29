@@ -3,9 +3,9 @@
 	exports.id = 'tapiinvoiceparserapi';
 	exports.name = 'Invoice parser';
 	exports.icon = 'ti ti-invoice';
-	exports.author = 'WhoMeta Inc';
+	exports.author = 'Total.js';
 	exports.version = '1';
-	exports.group = 'WhoMeta API Services';
+	exports.group = 'Total.js API Services';
 	exports.config = { token: '', path: '' };
 	exports.inputs = [{ id: 'input', name: 'Input' }];
 	exports.outputs = [{ id: 'output', name: 'Output' }, { id: 'error', name: 'Error' }];
@@ -53,7 +53,7 @@
 </script>
 
 <readme>
-It parses meta data of the invoice from the PDF/JPG/PNG file type. It utilizes the [WhoMeta Invoiceparser API](https://help.whometa.io/totalapi/6c221003eo51c/#130w3001db51d).
+It parses meta data of the invoice from the PDF/JPG/PNG file type. It utilizes the [Total.js Invoiceparser API](https://docs.totaljs.com/totalapi/6c221003eo51c/#130w3001db51d).
 
 __Input data:__
 
@@ -90,7 +90,7 @@ __Output data__:
 <settings>
 	<div class="padding bg-smoke">
 		<div class="m">
-			<p><a href="https://help.whometa.io/totalapi/6c221002eo50c/" target="_blank"><i class="ti ti-caret-right mr5"></i>Get WhoMeta API token</a>.<br>The token field supports variables in the form <span class="badge badge-medium badge-silver">{variable}</span>.</p>
+			<p><a href="https://docs.totaljs.com/totalapi/6c221002eo50c/" target="_blank"><i class="ti ti-caret-right mr5"></i>Get Total.js API token</a>.<br>The token field supports variables in the form <span class="badge badge-medium badge-silver">{variable}</span>.</p>
 			<ui-component name="input" path="?.token" config="camouflage:1;required:1;monospace:1"><b>API token</b></ui-component>
 		</div>
 		<div class="m">
