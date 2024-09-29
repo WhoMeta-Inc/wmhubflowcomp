@@ -1,0 +1,171 @@
+<script total>
+
+	exports.id = 'restroute';
+	exports.name = 'Route';
+	exports.group = 'REST API';
+	exports.icon = 'ti ti-map-pin';
+	exports.version = '1';
+	exports.author = 'WhoMeta Inc';
+	exports.config = { url: '/', method: 'GET', timeout: 5000, limit: 5120, upload: false, send: 'all' };
+	exports.outputs = [{ id: 'output', name: 'Output' }];
+	exports.kind = 'trigger';
+
+	exports.make = function(instance, config) {
+
+		var prev = null;
+
+		instance.close = function() {
+			prev && prev.remove();
+			prev = null;
+		};
+
+		instance.configure = function() {
+
+			if (prev) {
+				prev && prev.remove();
+				prev = null;
+			}
+
+			if (config.url && config.method) {
+
+				var flags = [];
+
+				config.timeout && flags.push(F.is5 ? ('<' + Math.ceil(config.timeout / 1000) + 's') : config.timeout);
+
+				if (F.is5 && config.upload)
+					flags.push('<' + config.limit + 'MB');
+
+				config.upload && flags.push((F.is5 ? '@' : '') + 'upload');
+
+				var action = function($) {
+
+					var ctrl = F.is5 ? $ : this;
+					var msg = instance.newmessage();
+					var data;
+
+					// Parse cookies
+					var cookies = {};
+					var cookie = ctrl.headers.cookie;
+
+					if (cookie) {
+						let arr = cookie.split(';');
+						for (let c of arr) {
+							let line = c.trim();
+							let index = line.indexOf('=');
+							if (index !== -1)
+								cookies[line.substring(0, index)] = line.substring(index + 1);
+						}
+					}
+
+					var query = ctrl.query;
+					var body = ctrl.body;
+					var params = ctrl.params;
+
+					switch (config.send) {
+						case 'payload':
+							data = body;
+							break;
+						case 'query':
+							data = query;
+							break;
+						case 'files':
+							data = ctrl.files;
+							break;
+						case 'params':
+							data = params;
+							break;
+						case 'headers':
+							data = ctrl.headers;
+							break;
+						case 'user':
+							data = ctrl.user;
+							break;
+						case 'cookies':
+							data = cookies;
+							break;
+						default:
+							data = { body: body, query: query, user: ctrl.user, files: ctrl.files, user: ctrl.user, url: ctrl.url, headers: ctrl.headers, params: params, ip: ctrl.ip, split: ctrl.split, cookies: cookies };
+							break;
+					}
+
+					msg.refs.controller = ctrl;
+					msg.send('output', data);
+
+				};
+
+				var auth = config.user == 1 ? '+' : config.user == 2 ? '-' : '';
+				prev = F.is5 ? ROUTE(auth + config.method + ' ' + config.url + (config.action ? (' ' + config.action) : '') + ' ' + flags.join(' '), action) : ROUTE(auth + config.method + ' ' + instance.replace(config.url) + (config.action ? (' ' + config.action) : ''), action, flags, config.limit);
+			}
+		};
+
+		instance.configure();
+	};
+
+</script>
+
+<readme>
+This component registers an HTTP Route and sends request data next. It stores `controller` instance in the `message.refs.controller` property. You must respond to the REST response component.
+
+< __IMPORTANT__:<br>The component works only with a defined Proxy endpoint in the Flow settings.
+< __URL__:<br>The URL must be relative to the defined Proxy endpoint. So if the endpoint is `/users/` and the desired address is `http://example.com/users/find` then the value must be `/find`
+
+__Output data__:
+
+```js
+{
+	"route": String,
+	"params": Object,
+	"query": Object,
+	"body": Object,
+	"files": Array,
+	"headers": Object,
+	"url": String,
+	"ip": String
+}
+```
+</readme>
+
+<settings>
+	<div class="padding">
+		<div class="row" data-bind="flow.head.worker__hide:!value || flow.head.origin.length < flow.head.proxyurl.length">
+			<div class="col-md-12 m">
+				<div class="message message-error"><b><i class="ti ti-warning"></i>No proxy endpoint defined.</b><br>This component will not work until then. Please go to main screen, open settings of this FlowStream instance and set the Endpoint.</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-3 m">
+				<ui-component name="input" path="?.method" config="required:1;dirsource:GET|GET,POST|POST,PUT|PUT,PATCH|PATCH,DELETE|DELETE">Method</ui-component>
+			</div>
+			<div class="col-md-9 m">
+				<ui-component name="input" path="?.url" config="required:1">Relative URL address</ui-component>
+				<div class="help">Relative path to: <ui-bind path="flow.head.proxyurl" config="text:value?value:window.location.origin"></ui-bind></div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-3 m">
+				<ui-component name="input" path="?.timeout" config="required:1;type:number;format:">Timeout</ui-component>
+			</div>
+			<div class="col-md-3 m">
+				<ui-component name="input" path="?.limit" config="required:1;type:number;ricon:!kB;align:1">Request limit</ui-component>
+			</div>
+			<div class="col-md-3 m">
+				<ui-component name="input" path="?.send" config="required:1;dirsource:all|Everything,payload|Payload,query|Query arguments,files|Files,params|Dynamic params,headers|Headers">Send to output</ui-component>
+			</div>
+		</div>
+	</div>
+</settings>
+
+<style>
+	.CLASS footer { padding: 10px; }
+	.CLASS footer div ui-bind { font-family: var(--monospace); }
+	.CLASS footer .method { background-color: var(--color); color: #FFF; padding: 2px 3px; border-radius: var(--radius); }
+</style>
+
+<body>
+	<header>
+		<i class="ICON"></i>NAME
+	</header>
+	<footer is="is-footer" path="CONFIG.method" config="show" class="hidden block">
+		<div><ui-bind path="CONFIG.method" config="text" class="method"></ui-bind> <a is="is-a" path="CONFIG.url" config="text;href:flow.head.proxyurl + (value.charAt(0)=== '/' ? value.substring(1) : value)" target="_blank"></a></div>
+	</footer>
+</body>

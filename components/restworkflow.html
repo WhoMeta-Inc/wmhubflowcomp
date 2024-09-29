@@ -1,0 +1,157 @@
+<script total>
+
+	exports.id = 'restworkflow';
+	exports.name = 'Workflow';
+	exports.group = 'REST API';
+	exports.version = '3';
+	exports.icon = 'ti ti-code';
+	exports.author = 'WhoMeta Inc';
+	exports.config = { name: 'Name', code: 'success();', clear: false };
+	exports.inputs = [{ id: 'input', name: 'Input' }];
+	exports.outputs = [{ id: 'output', name: 'Output' }, { id: 'error', name: 'Error' }];
+	exports.meta = { settingswidth: 1400 };
+
+	exports.make = function(instance, config) {
+
+		var repo = {};
+		var fn;
+
+		instance.message = function($) {
+			if (fn) {
+				try {
+					fn($, repo);
+				} catch (e) {
+					$.destroy();
+					$.throw(e);
+				}
+			} else
+				$.send('error', 'Not configured');
+		};
+
+		instance.configure = function() {
+			try {
+				var code = config.code;
+				if (code) {
+
+					var builder = ['var controller=$.refs.controller||EMPTYOBJECT'];
+
+					if (code.indexOf('headers') !== -1)
+						builder.push('headers=controller.headers||EMPTYOBJECT');
+
+					if (code.indexOf('params') !== -1)
+						builder.push('params=controller.params||EMPTYOBJECT');
+
+					if (code.indexOf('query') !== -1)
+						builder.push('query=controller.query||EMPTYOBJECT');
+
+					if (code.indexOf('variable(') !== -1)
+						builder.push('variable=key=>$.main.variables[key]||$.main.variables2[key]');
+
+					if (code.indexOf('respond(') !== -1)
+						builder.push('respond=(data)=>$.send(\'output\',data)');
+
+					if (code.indexOf('success(') !== -1)
+						builder.push('success=(data)=>$.send(\'output\',{success:true,value:data})');
+
+					if (code.indexOf('cancel(') !== -1)
+						builder.push('cancel=()=>$.end()');
+
+					if (code.indexOf('send(') !== -1)
+						builder.push('send=(data)=>$.instance.send(\'output\', data)');
+
+					if (code.indexOf('done(') !== -1)
+						builder.push('done=function(is){return function(err,response){if(err){$.send(\'error\',[{error:err.toString()}])}else{$.send(\'output\',{success:true,value:is==true?response:is})}}}');
+
+					builder.push('invalid=$.invalid=(err)=>$.send(\'error\',[{error:err.toString()}])');
+
+					if (code.indexOf('user') !== -1)
+						builder.push('user=controller.user');
+
+					if (code.indexOf('ip') !== -1)
+						builder.push('ip=controller.ip||\'\'');
+
+					if (code.indexOf('model') !== -1)
+						builder.push('model=$.data');
+
+					var AsyncFunction = Object.getPrototypeOf(async function(){}).constructor;
+					var body = builder.join(',') + ';try{\n' + code + '\n}catch(e){$.instance.status({error:e.message});$.destroy();}';
+
+					fn = code.indexOf('await ') === -1 ? new Function('$', 'repo', body) : new AsyncFunction('$', 'repo', body);
+
+					if (config.clear)
+						repo = {};
+
+				} else
+					fn = null;
+
+				instance.status(EMPTYOBJECT);
+			} catch (e) {
+				fn = null;
+				instance.status({ error: e.message });
+			}
+		};
+
+		instance.close = function() {
+			fn = null;
+			repo = null;
+		};
+
+		instance.configure();
+
+	};
+
+</script>
+
+<readme>
+The component simulates WhoMeta Schema Workflow operation. It can process data and store/read them into the database.
+
+__Properties__:
+
+- `$ {Message}`
+- `controller {Object}` A controller instance
+- `user {Object}` A user instance if exists
+- `headers {Object}` Request headers
+- `query {Object}` URL query arguments
+- `params {Object}` A dynamic URL params
+- `ip {String}` IP address
+- __`repo {Object}`__ a custom persistent repository object
+- __`model {Object}`__ an alias to `$.data`
+
+__Model/Data__:
+
+- `$.data {Object}` a message data
+- `$.repo {Object}` a message repository
+- `$.refs {Object}` a message references
+
+__Functions__:
+
+- `variable(key {String}) returns {String}` for reading variables
+- `cancel()` Cancels the processing without error and sending data next
+- `respond(data {Object})` Responds with data
+- `success(data {Object} optional)` Response with success object
+- `invalid(error {String})` Error handling`
+- `done(respond_value {Boolean/Object} optional)` return `function(err, response)` for handling callbacks
+	- when it `fails` it calls `invalid()`
+	- when it `done` it calls `success()`
+</readme>
+
+<settings>
+	<div class="padding">
+		<ui-component name="input" path="?.name" config="required:1" class="m">Workflow name</ui-component>
+		<ui-component name="input" path="?.clear" config="type:checkbox" class="m b">Clear repository object</ui-component>
+		<div class="ui-input-label">Code:</div>
+		<ui-component name="codemirror" path="?.code" config="type:javascript;minheight:300;parent:auto;margin:175;tabs:true;trim:true"></ui-component>
+	</div>
+</settings>
+
+<body>
+	<header>
+		<i class="ICON"></i>NAME: 
+		<b><ui-bind path="CONFIG.name" config="text"></ui-bind></b>
+	</header>
+	<footer>
+		<ui-bind path="STATUS.error" config="text span;show" style="padding:10px" class="fs12 red block">
+			<i class="ti ti-bug mr5"></i><b>ERROR:</b> <span></span>
+		</ui-bind>
+	</footer>
+</body>

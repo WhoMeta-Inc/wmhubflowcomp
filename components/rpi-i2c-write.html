@@ -1,0 +1,63 @@
+<script total>
+	exports.name = 'RPIi2cWrite';
+	exports.author = 'WhoMeta Inc';
+	exports.group = 'Raspberry';
+	exports.icon = 'ti ti-table-alt';
+	exports.version = '1';
+	exports.config = {};
+	exports.inputs = [{ id: 'input', name: 'Input' }];
+	exports.outputs = [{ id: 'output', name: 'Output' }, { id: 'error', name: 'Error' }];
+
+	exports.npm = ['i2c-bus'];
+
+	exports.make = function(instance, config) {
+
+		var I2C = require('i2c-bus');
+		var stringtonumber = c => parseInt(c);
+
+		instance.message = function($) {
+
+			let address, register, bytes;
+
+			try {
+				address = parseInt($.data.address ? $.data.address : config.address);
+				register = parseInt($.data.register ? $.data.register : config.register);
+				bytes = Buffer.from($.data.bytes ? $.data.bytes : (config.bytes.split (',').map(stringtonumber)));
+			} catch (err) {
+				$.send('output', err + '');
+				return;
+			}
+
+			// Send msg
+			let i2c1 = I2C.openSync(1);
+			let length = i2c1.writeI2cBlockSync(address, register, bytes.length, bytes);
+			$.send('output', { data: bytes });
+			i2c1.closeSync();
+		};
+	};
+
+</script>
+
+<readme>
+# I2C Write
+
+Parameters, can be transmitted to the component, or directly set as setting.
+
+- `address`: The I2C address of the device
+- `register`: The (starting) register
+- `bytes`: The bytes which will be written
+</readme>
+
+<settings>
+	<div class="padding">
+		<ui-component name="input" path="?.address">Address</ui-component>
+		<ui-component name="input" path="?.register">Register</ui-component>
+		<ui-component name="input" path="?.bytes">Data</ui-component>
+	</div>
+</settings>
+
+<body>
+	<header>
+		<i class="ICON"></i>Raspberry I2C Write
+	</header>
+</body>

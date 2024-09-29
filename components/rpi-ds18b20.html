@@ -1,0 +1,289 @@
+<script total>
+
+	exports.name = 'OneWire';
+	exports.group = 'Raspberry Pi';
+	exports.icon = 'ti ti-code';
+	exports.author = 'WhoMeta Inc';
+	exports.version = '1';
+	exports.config = {};
+	//exports.inputs = [{ id: 'input', name: 'Input' }];
+	exports.outputs = [{ id: 'output', name: 'Output' }];
+
+	exports.make = function(instance, config) {
+		var sensors = {};
+		var values = {};
+		var interval;
+		var reading = false;
+
+		var average = arr => arr.reduce((a,b) => a + b, 0) / arr.length;
+
+		instance.message = function($) {
+
+			if (reading)
+				return;
+			reading = true;
+
+			ONEWIRE.list((err, list) => {
+				$.data = {
+					ts: Date.now(),
+					ignorelist: [],
+					sensors: []
+				};
+
+				list.wait((id, next) => {
+					if (!sensors[id]) {
+						$.data.ignorelist.push(id)
+						return next();
+					}
+
+					ONEWIRE.readDS18B20(id, config, function (err, data) {
+
+						if (err) {
+							instance.throw(err);
+							//$.data[id] = -127;
+						} else {
+							let val = Math.round(data * 100) / 100;
+							if (config.history) {
+								values[id] = values[id] || [];
+								values[id].unshift(val);
+
+								if (values[id].length > 10)
+									values[id] = values[id].slice(0, 10);
+							}
+							let obj = { id, name: sensors[id], value: val };
+							if (config.history) {
+								obj.history = values[id];
+								obj.average = average(obj.history);
+							}
+							$.data.sensors.push(obj);
+						}
+
+						next();
+
+					});
+				}, function done(){
+					$.send('output');
+					reading = false;
+				});
+			});
+
+		};
+
+		instance.configure = function() {
+			sensors = {};
+			Object.keys(config.map).forEach(s => {
+				sensors[config.map[s]] = s;
+			});
+
+			if (!isNaN(config.interval) && config.interval < 30)
+				config.interval = 30;
+
+			clearInterval(interval);
+			interval = setInterval(() => {
+				instance.message(instance.newmessage({}));
+			}, (config.interval || 60) * 1000); // default 1 minute
+		};
+
+		instance.configure();
+
+		instance.close = () => {
+			clearInterval(interval);
+		};
+
+		instance.trigger = () => {
+			instance.message(instance.newmessage({}));
+		};
+
+	};
+
+	exports.call = function call(data, next){
+		ONEWIRE.list((err, list) => {
+			if (err) {
+				console.log('list error', err);
+				next([]);
+			} else {
+				next(list.map(d => ({ name: d, id: d })));
+			}
+		});
+	};
+
+	var Fs = require('fs');
+	var Path = require('path');
+
+    var ONEWIRE = {
+        W1_DIR: '/sys/bus/w1/devices/w1_bus_master1',
+        W1_MASTER: 'w1_master_slaves',
+        list: (callback) => {
+            const filepath = Path.join(ONEWIRE.W1_DIR, ONEWIRE.W1_MASTER);
+            Fs.stat(filepath, function(err){
+                if (err)
+                    return callback(err);
+
+                Fs.readFile(filepath, 'utf8', function(err, data){
+                    if (err)
+                        return callback(err);
+
+                    var devices = data.split('\n').trim();
+                    callback(null, devices);
+                });
+            });
+        },
+        readDS18B20: function(id, options, callback){
+
+            if (!id)
+                return callback('No id specified');
+
+            if (typeof(options) === 'function') {
+                callback = options;
+                options = {};
+            }
+
+            const filepath = Path.join(ONEWIRE.W1_DIR, id, 'w1_slave');
+
+            Fs.stat(filepath, function(err){
+                if (err)
+                    return callback(`Sensor ${id} not found`);
+
+                Fs.readFile(filepath, 'utf8', function(err, data){
+                    if (err)
+                        return callback(err);
+
+                    var temp = ONEWIRE.parseTemperature(data, options.digits, options.degF);
+                    callback(null, temp);
+                });
+            });
+        },
+        readDS2438: function(id, options, callback){
+
+            if (!id)
+                return callback('No id specified');
+
+            if (typeof(options) === 'function') {
+                callback = options;
+                options = {};
+            }
+
+            const dir = Path.join(ONEWIRE.W1_DIR, id);
+
+            Fs.readdir(dir, function(err, list) {
+                if (err)
+                    return callback(`Sensor ${id} not found`);
+
+                var i = 0;
+                list.forEach(function(f) {
+                    if (f === 'temperature' || f === 'vad' || f === 'vdd' || f === 'iad')
+                        return i++;
+                });
+
+                if (i < 4)
+                    return callback(`Error reading sensor ${id}`);
+
+                var temperature, vad, vdd, iad = '-1';
+
+                (async () => {
+                    try {
+                        temperature = await read(Path.join(dir, 'temperature'));
+                        vad = await read(Path.join(dir, 'vad'));
+                        vdd = await read(Path.join(dir, 'vdd'));
+                    } catch(e){
+                        return callback(`Error reading sensor ${id}, ${e.code}`);
+                    }
+                    try {
+                        iad = await read(Path.join(dir, 'iad'));
+                    } catch(e){
+                        console.log(e);
+                    }
+
+                    temperature = +temperature.trim() / 256;
+                    vdd = +vdd.trim() / 100;
+                    vad = +vad.trim() / 100;
+                    iad = +iad.trim() / (4.096 * 4700);
+
+                    if (temperature === 0 || vdd === 0 || vad === 0)
+                        return callback(`Error reading sensor ${id}`);
+
+                    /* Compute light (Light sensor BPW 34 S on IAD Input of the DS2438Z) */
+                    var lux = iad * (!isNaN(options.lumcoeficient) ? options.lumcoeficient : 12000.0);
+
+                    var humidity = 0;
+                    if (options.zerooffset && options.slope)
+                        humidity = ONEWIRE.hum(vad, options.zerooffset, options.slope / 1000)
+                    else
+                        humidity = (vad / vdd - 0.16) / 0.0062 / (1.0546 - 0.00216 * temperature );
+
+                    callback(null, { temperature: temperature.format(2), humidity: humidity.format(2), liminosity: lux });
+                })();
+            });
+        },
+        parseTemperature: function parseTemperature(data, digits, degF) {
+            var arr = data.split('\n');
+            var digits = digits !== undefined ? digits : 2;
+            let temp = null;
+
+            // Ensure "crc=00" is not present since this indicates the sensor has been disconnected.
+            if (arr[0].indexOf('YES') > -1 && arr[0].indexOf('crc=00') === -1) {
+                var out = data.match(/t=(-?(\d+))/);
+                if (out !== null) {
+                    temp = parseInt(out[1], 10) / 1000;
+                    if (degF) {
+                        temp = (temp * (9 / 5)) + 32;
+                    }
+                    temp = temp.round(digits);
+                }
+            } else
+                console.log('Failed to parse DS18B20', arr);
+
+            return temp;
+        },
+        hum: function hum(vad, offset, slope) {
+            offset = (offset / 0.05) * 0.033;
+            slope = (slope / 0.05) * 0.033;
+            return (vad - offset) / slope;
+        }
+    };
+
+</script>
+
+<readme>
+## Output
+```js
+{
+	"ts": 1646643556666,      // timestamp
+	"ignorelist": []          // list of ignored devices, the devices not in the "Name/ID map" in config form
+	"sensors": [
+		{
+			"id": "28-3c01e076b84d", // onewire sensor id
+			"name": "livingroom",    // friedly name assigned in the config form
+			"value": 21.06,          // current value
+			// optionaly, if enabled, the last 10 values, 1st(21.06) is most recent
+			"history": [ 21.06, 21.13, 21.06, 21.06, 21.13, 21.13, 21.06, 21.06, 21.08, 21.09 ],
+		},
+		...
+]
+```
+</readme>
+
+<settings>
+	<div class="padding">
+		<ui-component name="keyvalue" path="?.map" config="placeholderkey:Sensor name;placeholdervalue:Type a sensor id and hit enter" class="m">Name/ID map</ui-component>
+		<ui-component name="input" path="?.interval" config="type:number;format:" class="m">Interval in seconds (default 60s, minimum 30s)</ui-component>
+		<ui-component name="input" path="?.history" config="type:checkbox" class="m">Keep history? (last 10 values for each sensor)</ui-component>
+	</div>
+</settings>
+
+<style>
+	.CLASS button { float: right; height: 20px; font-size: 11px; border: 1px solid #E0E0E0; border-radius: var(--radius); color: #000; background-color: transparent; margin: 0 0 0 4px; padding: 0 5px; }
+	.CLASS button:hover { background-color: #F8F8F8; }
+	.CLASS button:active { background-color: #E0E0E0; }
+
+	.ui-dark .CLASS button { border-color: #404040; color: #FFF; }
+	.ui-dark .CLASS button:hover { background-color: #303030; }
+	.ui-dark .CLASS button:active { background-color: #404040; }
+</style>
+
+<body>
+	<header>
+		<button class="exec" data-exec="FUNC.trigger">Read</button>
+		<i class="ICON"></i>NAME (DS18B20)
+	</header>
+</body>

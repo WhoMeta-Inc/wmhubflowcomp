@@ -1,0 +1,72 @@
+<script total>
+
+	exports.id = 'restresponse';
+	exports.name = 'Response';
+	exports.group = 'REST API';
+	exports.icon = 'ti ti-share';
+	exports.version = '3';
+	exports.author = 'WhoMeta Inc';
+	exports.config = { type: 'json', code: 200 };
+	exports.inputs = [{ id: 'input', name: 'Response' }];
+	exports.kind = 'output';
+
+	exports.make = function(instance, config) {
+		instance.message = function($) {
+			var ctrl = $.refs.controller;
+			if (ctrl) {
+				ctrl.status = config.code;
+				switch (config.type) {
+					case 'json':
+						ctrl.json($.data);
+						break;
+					case 'success':
+						ctrl.success();
+						break;
+					case 'html':
+						ctrl.content($.data, 'text/html');
+						break;
+					case 'plain':
+						ctrl.plain($.data);
+						break;
+					case 'empty':
+					default:
+						ctrl.empty();
+						break;
+				}
+			}
+			$.destroy();
+		};
+	};
+
+</script>
+
+<readme>
+This component can respond on the REST Route component.
+</readme>
+
+<settings>
+	<div class="padding">
+		<div class="row">
+			<div class="col-md-3 m">
+				<ui-component name="input" path="?.type" config="required:1;dirsource:json|JSON,success|Success,empty|Empty response,plain|Plain text,html|HTML">Type</ui-component>
+			</div>
+			<div class="col-md-3 m">
+				<ui-component name="input" path="?.code" config="required:1;type:number;format:">Status code</ui-component>
+			</div>
+		</div>
+	</div>
+</settings>
+
+<style>
+	.CLASS header { padding: 6px !important; }
+	.CLASS header ui-bind { font-family: var(--monospace); color: #FFF; margin-left: 4px; padding: 2px 3px; border-radius: var(--radius); }
+	.CLASS header ui-bind:last-child { background-color: grey; }
+</style>
+
+<body>
+	<header>
+		<i class="ICON"></i>NAME
+		<ui-bind path="CONFIG.code" config="text;exec:el.css('background-color', value >= 400 ? '#E73323' : '#4285F4')"></ui-bind> 
+		<ui-bind path="CONFIG.type" config="text"></ui-bind>
+	</header>
+</body>

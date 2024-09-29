@@ -1,0 +1,104 @@
+<script total>
+
+	exports.id = 'qrgenerator';
+	exports.name = 'QR generator';
+	exports.icon = 'ti ti-qrcode';
+	exports.group = 'Common';
+	exports.author = 'WhoMeta Inc';
+	exports.version = '2';
+	exports.config = {};
+	exports.inputs = [{ id: 'input', name: 'Input' }];
+	exports.outputs = [{ id: 'output', name: 'Output' }];
+
+	exports.npm = ['awesome-qr'];
+
+	exports.make = function(instance, config) {
+
+		const { AwesomeQR } = require("awesome-qr");
+		const { writeFile, readFile } = require('fs').promises;
+		const filename = PATH.tmp(instance.id + 'qrcode.png');
+		var bgready = false;
+
+		instance.message = function($) {
+			var data = $.data;
+			generate(data.text, function(err, buf){
+				if (err)
+					return $.end();
+				if ($.data.filename)
+					F.Fs.writeFile($.data.filename, buf, function(err){
+						if (err) instance.throw(err);
+					});
+				$.data._qrcode = buf.toString('base64');
+				$.send('output');
+			});
+		};
+
+		instance.configure = function() {
+			/*// "config" is changed
+			if (config.background) {
+				writeFile(filename, Buffer.from(config.background.split(';base64,')[1], 'base64'))
+					.then(_ => { console.log('OK'); bgready = true; })
+					.catch(err => { console.log('FAILED', err); bgready = false; });
+			} else
+				bgready = false;*/
+		};
+
+		instance.configure();
+
+		async function generate(text, cb) {
+			var bg;
+
+			if (bgready) {
+				try {
+					bg = await readFile(filename);
+				} catch(e) {
+
+				}
+			}
+
+			var obj = {
+				text,
+				size: 600
+			}
+
+			if (bg)
+				obj.backgroundImage = bg;
+			var buffer;
+
+			new AwesomeQR(obj).draw().then(buf => {
+				cb(null, buf);
+			}).catch(err => {
+				cb(err);
+			});
+		};
+
+	};
+
+</script>
+
+<readme>
+## Input
+
+```js
+{
+	text: 'text to write to qr code',
+	filename: '/public/img/', // optionaly writes the file to filesystem
+	...
+}
+```
+## Output
+
+```js
+{
+	text: 'text to write to qr code',
+	...
+	_qrcode: 'base64 encoded buffer'
+}
+```
+</readme>
+
+<body>
+	<header>
+		<i class="ICON"></i>NAME
+	</header>
+</body>

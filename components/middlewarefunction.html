@@ -1,0 +1,80 @@
+<script total>
+
+	exports.id = 'middleware_function';
+	exports.name = 'Middleware Function';
+	exports.group = 'Common';
+	exports.version = '1';
+	exports.icon = 'ti ti-code';
+	exports.author = 'WhoMeta Inc';
+	exports.config = { code: '// instance {FlowStreamInstance};\n// $ {FlowStreamMessage};\n// vars {Object};\n// repo {Object};\n// data {String/Number/Boolean/Date/Buffer/Object};\n// callback(...);' };
+
+	exports.make = function(instance, config) {
+
+		instance.configure = function() {
+			try {
+				if (config.code) {
+					fn = new Function('instance', '$', 'data', 'repo', 'require', 'vars', 'callback', config.code);
+				} else {
+					fn = null;
+				}
+			} catch (e) {
+				fn = null;
+				instance.throw('Code: ' + e.message);
+			}
+			instance.status(config.name);
+		};
+
+		instance.close = function() {
+			fn = null;
+		};
+
+		instance.execute = function execute($, callback) {
+			if (!fn)
+				callback();
+			else
+				fn(instance, $, $.data, $.repo, require, instance.variables, callback);
+		};
+
+		instance.configure();
+	};
+
+</script>
+
+<readme>
+The code defined in this component can be executed by multiple `Middleware Exec`.
+**Example:**
+```js
+// available arguments
+// instance {FlowStreamComponent}
+// $        {FlowStreamMessage}
+// data     reference to $.data
+// repo     reference to $.repo
+// vars     reference to instance.main.variables
+
+if (data.headers['x-token'] === instance.main.variables.token)
+	// data will be send to `Output` output of `Middleware Exec` component
+	callback(null, data);
+else
+	// data will be send to `Error` output of `Middleware Exec` component
+	callback('an error occured');
+```
+</readme>
+
+<settings>
+	<div class="padding">
+		<ui-component name="input" path="?.name" config="required:1" class="m">Name</ui-component>
+		<div class="ui-input-label">Code</div>
+		<ui-component name="codemirror" path="?.code" config="required:1;type:javascript;minheight:300;parent:auto;margin:60;tabs:true;trim:true"></ui-component>
+	</div>
+</settings>
+
+<style>
+	.CLASS footer { padding: 10px; }
+</style>
+
+<body>
+	<header>
+		<i class="ICON"></i>NAME
+	</header>
+	<footer><ui-bind path="!STATUS" config="text"></ui-bind></footer>
+</body>

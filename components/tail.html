@@ -1,0 +1,90 @@
+<script total>
+
+	exports.id = 'tail';
+	exports.name = 'Tail';
+	exports.icon = 'ti ti-file';
+	exports.group = 'Linux Monitoring';
+	exports.config = { path: '/var/log/syslog' };
+	exports.author = 'WhoMeta Inc';
+	exports.outputs = [{ id: 'output', name: 'Output' }, { id: 'error', name: 'Error' }];
+	exports.version = '1';
+
+	exports.make = function(instance, config) {
+
+		var stats = { value: '' };
+		var proc;
+
+		var watch = function() {
+
+			proc && proc.kill(9);
+
+			proc = require('child_process').spawn('tail', ['-n 1', '-f', config.path]);
+
+			proc.on('close', function() {
+				proc = null;
+			});
+
+			proc.on('error', function(err) {
+				instance.send('error', err + '');
+			});
+
+			proc.stdout.on('data', function(response) {
+				stats.value = response.toString('utf8').trim();
+				stats.date = new Date();
+				instance.status(stats);
+				instance.send('output', stats);
+			});
+		};
+
+		instance.close = function() {
+			if (proc) {
+				proc.kill(9);
+				proc = null;
+			}
+		};
+
+		instance.configure = function() {
+			watch();
+		};
+
+		instance.configure();
+	};
+
+</script>
+
+<readme>
+This component monitors last line in some text file with the help of `tail` command in the Linux systems.
+
+__Data Example__:
+
+```js
+{
+	value: 'Some meessage'
+	date: Date
+}
+```
+</readme>
+
+<style>
+	.CLASS footer { padding: 10px 5px; font-size: 11px; }
+</style>
+
+<settings>
+	<div class="padding">
+		<ui-component name="input" path="?.path" config="required:1">Path</ui-component>
+	</div>
+</settings>
+
+<body>
+	<header>
+		<i class="ICON"></i>NAME - <code><ui-bind path="CONFIG.path" config="text;empty"></ui-bind></code>
+	</header>
+	<footer>
+		<ui-bind path="!STATUS" config="template;show:value.value" class="block">
+			<script type="text/html">
+				<div class="b">{{ value.date | format('HH:mm:ss') }}</div>
+				<div>{{ value.value }}</div>
+			</script>
+		</ui-bind>
+	</footer>
+</body>

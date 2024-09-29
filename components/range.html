@@ -1,0 +1,101 @@
+<script total>
+
+	exports.id = 'range';
+	exports.name = 'Range';
+	exports.group = 'Common';
+	exports.icon = 'ti ti-arrows-h';
+	exports.author = 'WhoMeta Inc';
+	exports.version = '1';
+	exports.config = {};
+	exports.inputs = [{ id: 'input', name: 'Input' }];
+	exports.outputs = [{ id: 'output', name: 'Output' }];
+
+	// exports.npm = ['npm_module_1', 'npm_module_2@version'];
+	// exports.meta = { readonly: false, singleton: false, hidden: false };
+
+	exports.make = function(instance, config) {
+
+		var inmin, inmax, outmin, outmax;
+
+		instance.message = function($) {
+			var data = $.data;
+
+			var val = parseFloat(typeof(data) === 'object' ? U.get(data, config.property) : data);
+
+			if (!val || typeof val !== 'number') {
+				instance.throw('Value "{0}" is not a number'.format(val.toString().substring(0, 20)));
+				$.destroy();
+				return;
+			}
+
+			if (val < inmin) {
+				$.data = inmin;
+			} else if (val > inmax)
+				$.data = inmax;
+			else {
+				data = outmin + (outmax - outmin) * (val - inmin) / (inmax - inmin);
+				$.data = config.round ? Math.round(data) : data;
+			}
+
+			$.send('output', data);
+		};
+
+		instance.configure = function() {
+			inmin = parseFloat(config.input_min || 0);
+			inmax = parseFloat(config.input_max || 1023);
+			outmin = parseFloat(config.output_min || 0);
+			outmax = parseFloat(config.output_max || 100);
+			instance.status(`${inmin} - ${inmax} --> ${outmin} - ${outmax}`);
+		};
+
+		instance.configure();
+
+	};
+
+</script>
+
+<readme>
+
+</readme>
+
+<settings>
+	<div class="padding">
+		<ui-component name="input" path="?.property" config="placeholder:e.g. path.to.property" class="m">Property (unless the data is the value itself)</ui-component>
+		<div class="row">
+			<div class="col-md-3">
+				<ui-component name="input" path="?.input_min" config="type:number;format:" class="m">Input min (defaults to 0)</ui-component>
+			</div>
+			<div class="col-md-3">
+				<ui-component name="input" path="?.input_max" config="type:number;format:" class="m">Input max (defaults to 1023)</ui-component>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-3">
+				<ui-component name="input" path="?.output_min" config="type:number;format:" class="m">Output min (defaults to 0)</ui-component>
+			</div>
+			<div class="col-md-3">
+				<ui-component name="input" path="?.output_max" config="type:number;format:" class="m">Output max (defaults to 100)</ui-component>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-3">
+				<ui-component name="input" path="?.round" config="type:checkbox">Round output</ui-component>
+			</div>
+		</div>
+	</div>
+</settings>
+
+<style>
+	.CLASS footer { padding: 10px; font-size: 12px; }
+</style>
+
+<script>
+
+</script>
+
+<body>
+	<header>
+		<i class="ICON"></i>NAME
+	</header>
+	<footer><ui-bind path="!STATUS" config="text"></ui-bind></footer>
+</body>
