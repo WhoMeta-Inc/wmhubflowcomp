@@ -855,7 +855,7 @@
 		"id": "restresponse",
 		"group": "REST API",
 		"name": "Response",
-		"url": "https://cdnjs.whometa.eu/components/restresponse.html",
+		"url": "https://cdnjs.whometa.eu/components/tresponse.html",
 		"author": "WhoMeta",
 		"icon": "ti ti-share",
 		"color": "",
