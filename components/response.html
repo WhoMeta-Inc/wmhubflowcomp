@@ -5,7 +5,7 @@
 	exports.group = 'General';
 	exports.icon = 'ti ti-bullhorn';
 	exports.version = '1';
-	exports.author = "WhoMeta",
+	exports.author = 'Total.js';
 	exports.config = { type: 'auto', code: 200, path: 'response' };
 	exports.inputs = [{ id: 'input', name: 'Response' }];
 	exports.outputs = [{ id: 'output', name: 'Log' }];
@@ -14,7 +14,6 @@
 	exports.make = function(instance, config) {
 
 		var nested = false;
-
 		instance.message = function($) {
 			var ctrl = $.refs.controller;
 			if (ctrl) {
